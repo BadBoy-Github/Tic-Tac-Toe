@@ -16,6 +16,14 @@ const App = () => {
     setWarn("");
   };
 
+  const resetGame = () => {
+    setBoard(Array(9).fill(null));
+    setGameStart(false);
+    setPlayer(null);
+    setWarn("");
+    setWinner(null);
+  };
+
   const cellClick = (index) => {
     if (!gameStart) {
       setWarn("Please start the game first!");
@@ -112,12 +120,18 @@ const App = () => {
             {warn}
           </div>
 
-          <div className="flex justify-center items-center px-20 absolute bottom-40">
+          <div className="flex justify-center items-center px-20 absolute bottom-40 gap-10">
             <button
-              className={`bg-zinc-800 text-zinc-200 font-semibold px-8 py-3 rounded-lg cursor-pointer hover:bg-zinc-800/90 hover:scale-105 active:bg-zinc-800 active:scale-100 hover:shadow-2xl transition-all duration-300`}
+              className={`bg-zinc-800 border-3 border-zinc-800 text-zinc-200 font-semibold px-8 py-3 rounded-lg cursor-pointer hover:bg-zinc-800/90 hover:scale-105 hover:border-zinc-800/90 active:bg-zinc-800 active:scale-100 active:border-zinc-800 hover:shadow-2xl transition-all duration-300`}
               onClick={startGame}
             >
               Start Game
+            </button>
+            <button
+              className={`border-3 border-zinc-800 text-zinc-800 font-semibold px-8 py-3 rounded-lg cursor-pointer hover:scale-105 active:scale-100 hover:shadow-2xl transition-all duration-300`}
+              onClick={resetGame}
+            >
+              Reset Game
             </button>
           </div>
         </div>
