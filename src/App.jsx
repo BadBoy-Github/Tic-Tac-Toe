@@ -4,6 +4,7 @@ import { ImCross } from "react-icons/im";
 
 const App = () => {
   const [board, setBoard] = useState(Array(9).fill(null));
+  let [warn, setWarn] = useState(null);
   let [player, setPlayer] = useState(null);
   let [gameStart, setGameStart] = useState(false);
   let [winner, setWinner] = useState(null);
@@ -12,9 +13,13 @@ const App = () => {
     setBoard(Array(9).fill(null));
     setGameStart(true);
     setPlayer(1);
+    setWarn("");
   };
 
   const cellClick = (index) => {
+    if (!gameStart) {
+      setWarn("Please start the game first!");
+    }
     if (!gameStart || winner || board[index] !== null) return;
 
     const newBoard = [...board];
@@ -100,8 +105,11 @@ const App = () => {
               </div>
             </div>
           </div>
-          <div className="text-green-600 mt-8 text-lg font-bold">
-            {/* {gameStart ? `Player ${player} Win` : ``} */}
+          <div className="text-green-600 mt-8 text-xl font-bold">
+            {winner && `🎉 Player ${winner} Wins!`}
+          </div>
+          <div className="text-amber-700 mt-20 text-lg font-semibold">
+            {warn}
           </div>
 
           <div className="flex justify-center items-center px-20 absolute bottom-40">
