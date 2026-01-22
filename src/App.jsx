@@ -3,19 +3,24 @@ import { BsFillRecordCircleFill } from "react-icons/bs";
 import { ImCross } from "react-icons/im";
 
 const App = () => {
-  const board = [null, null, null, null, null, null, null, null, null];
+  const [board, setBoard] = useState([]);
   let [player, setPlayer] = useState(0);
   let [gameStart, setGameStart] = useState(false);
 
   const startGame = () => {
+    setBoard(Array(9).fill(null));
     setGameStart(true);
     setPlayer(1);
   };
 
   const cellClick = (index) => {
-    if (gameStart) {
-      console.log(`cell ${index} clicked`);
-    }
+    if (!gameStart) return;
+    if (board[index] !== null) return;
+
+    const newBoard = [...board];
+    newBoard[index] = player === 1 ? "x" : "o";
+    setBoard(newBoard);
+    setPlayer(player === 1 ? 2 : 1);
   };
 
   return (
@@ -29,7 +34,14 @@ const App = () => {
                   className="bg-zinc-600/50 rounded-lg flex justify-center items-center cursor-pointer hover:bg-zinc-600/80 transition-all duration-300"
                   key={index}
                   onClick={() => cellClick(index)}
-                ></div>
+                >
+                  {value == "x" && (
+                    <ImCross className="text-red-600 text-3xl" />
+                  )}
+                  {value == "o" && (
+                    <BsFillRecordCircleFill className="text-blue-600 text-4xl" />
+                  )}
+                </div>
               );
             })}
           </div>
