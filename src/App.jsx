@@ -3,9 +3,10 @@ import { BsFillRecordCircleFill } from "react-icons/bs";
 import { ImCross } from "react-icons/im";
 
 const App = () => {
-  const [board, setBoard] = useState([]);
-  let [player, setPlayer] = useState(0);
+  const [board, setBoard] = useState(Array(9).fill(null));
+  let [player, setPlayer] = useState(null);
   let [gameStart, setGameStart] = useState(false);
+  let [winner, setWinner] = useState(null);
 
   const startGame = () => {
     setBoard(Array(9).fill(null));
@@ -14,14 +15,34 @@ const App = () => {
   };
 
   const cellClick = (index) => {
-    if (!gameStart) return;
-    if (board[index] !== null) return;
+    if (!gameStart || winner || board[index] !== null) return;
 
     const newBoard = [...board];
     newBoard[index] = player === 1 ? "x" : "o";
     setBoard(newBoard);
     setPlayer(player === 1 ? 2 : 1);
+
+    const win = checkWinner();
+    if (win) {
+      setWinner(win);
+      setGameStart(false);
+    }else {
+      setPlayer(player === 1 ? 2 : 1);
+    }
   };
+
+  const checkWinner = () => {};
+
+  const winPatterns = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
 
   return (
     <div className="w-full h-screen bg-zinc-800 flex justify-center items-center">
@@ -50,19 +71,27 @@ const App = () => {
           <h1 className="text-4xl font-bold">Tic. Tac. Toe...</h1>
           <p className="mt-2">Challenge your friend. Outsmart every move.</p>
           <div className="w-[80%] h-20 mt-4 flex justify-between items-center ">
-            <div className="flex justify-start items-center gap-4">
+            <div
+              className={`flex justify-start items-center gap-4 ${player === 1 ? `opacity-100` : `opacity-50`}`}
+            >
               <div className="w-12 h-12 rounded-full bg-red-600 flex justify-center items-center">
                 <p className="text-2xl text-white">
                   <ImCross />
                 </p>
               </div>
               <div className="flex flex-col">
-                <p className="text-lg">Player 1</p>
+                <p className={`text-lg ${player === 1 ? `font-semibold` : ``}`}>
+                  Player 1
+                </p>
               </div>
             </div>
-            <div className="flex justify-end items-center gap-4">
+            <div
+              className={`flex justify-start items-center gap-4 ${player === 2 ? `opacity-100` : `opacity-50`}`}
+            >
               <div className="flex flex-col">
-                <p className="text-lg">Player 1</p>
+                <p className={`text-lg ${player === 2 ? `font-semibold` : ``}`}>
+                  Player 2
+                </p>
               </div>
               <div className="w-12 h-12 rounded-full bg-blue-600 flex justify-center items-center">
                 <p className="text-3xl text-white">
@@ -71,19 +100,16 @@ const App = () => {
               </div>
             </div>
           </div>
-          <div className="text-zinc-600 mt-4">
-            {gameStart ? `Player ${player}'s turn` : ``}
-          </div>
           <div className="text-green-600 mt-8 text-lg font-bold">
-            {/* {gameStart ? `Player ${platerWin} Win` : ``} */}
+            {/* {gameStart ? `Player ${player} Win` : ``} */}
           </div>
 
-          <div className="h-20 w-full mt-16 flex justify-center items-center px-20">
+          <div className="flex justify-center items-center px-20 absolute bottom-40">
             <button
-              className="bg-zinc-800 text-zinc-200 font-semibold px-8 py-3 rounded-lg cursor-pointer hover:bg-zinc-800/90 hover:scale-105 active:bg-zinc-800 active:scale-100 hover:shadow-2xl transition-all duration-300"
+              className={`bg-zinc-800 text-zinc-200 font-semibold px-8 py-3 rounded-lg cursor-pointer hover:bg-zinc-800/90 hover:scale-105 active:bg-zinc-800 active:scale-100 hover:shadow-2xl transition-all duration-300`}
               onClick={startGame}
             >
-              Play
+              Start Game
             </button>
           </div>
         </div>
