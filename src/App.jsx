@@ -43,21 +43,27 @@ const App = () => {
 
     const newBoard = [...board];
     newBoard[index] = player === 1 ? "x" : "o";
+    checkWinner(board);
     setBoard(newBoard);
     setPlayer(player === 1 ? 2 : 1);
-
-    const win = checkWinner();
-    if (win) {
-      setWinner(win);
-      setGameStart(false);
-    } else {
-      setPlayer(player === 1 ? 2 : 1);
-    }
   };
 
-  const checkWinner = () => {
-    for (let pattern of winPatterns) {
+  const checkWinner = (currentBoard) => {
+    for (let pattern in winPatterns) {
       const [a, b, c] = pattern;
+
+      if (
+        currentBoard[a] &&
+        currentBoard[a] === currentBoard[b] &&
+        currentBoard[a] === currentBoard[c]
+      ) {
+        setWinner(currentBoard[a] === "x" ? 1 : 2);
+        return;
+      }
+    }
+    // Check for draw
+    if (board.every((cell) => cell !== null)) {
+      setWinner("Draw");
     }
   };
 
