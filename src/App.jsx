@@ -43,14 +43,14 @@ const App = () => {
 
     const newBoard = [...board];
     newBoard[index] = player === 1 ? "x" : "o";
-    checkWinner(board);
+    checkWinner(newBoard);
     setBoard(newBoard);
     setPlayer(player === 1 ? 2 : 1);
   };
 
   const checkWinner = (currentBoard) => {
-    for (let pattern in winPatterns) {
-      const [a, b, c] = pattern;
+    for (let i = 0; i < winPatterns.length; i++) {
+      const [a, b, c] = winPatterns[i];
 
       if (
         currentBoard[a] &&
@@ -62,7 +62,7 @@ const App = () => {
       }
     }
     // Check for draw
-    if (board.every((cell) => cell !== null)) {
+    if (currentBoard.every((cell) => cell !== null)) {
       setWinner("Draw");
     }
   };
@@ -123,25 +123,25 @@ const App = () => {
               </div>
             </div>
           </div>
-          <div className="text-green-600 mt-8 text-xl font-bold">
-            {winner && `🎉 Player ${winner} Wins!`}
+          <div className="text-green-700 mt-8 text-2xl font-bold">
+            {winner === "Draw"
+              ? "🎯 It's a Draw!"
+              : winner && `Player ${winner} Wins!`}
           </div>
           <div className="text-amber-700 mt-20 text-lg font-semibold">
             {warn}
           </div>
 
-          <div className="flex justify-center items-center px-20 absolute bottom-40 gap-10">
+          <div className="flex justify-center items-center px-20 absolute bottom-40">
             <button
-              className={`bg-zinc-800 border-3 border-zinc-800 text-zinc-200 font-semibold px-8 py-3 rounded-lg cursor-pointer hover:bg-zinc-800/90 hover:scale-105 hover:border-zinc-800/90 active:bg-zinc-800 active:scale-100 active:border-zinc-800 hover:shadow-2xl transition-all duration-300`}
-              onClick={startGame}
+              className={`${
+                gameStart
+                  ? "border-3 border-zinc-800 text-zinc-800 "
+                  : "bg-zinc-800 border-3 border-zinc-800 text-zinc-200 hover:bg-zinc-800/90 hover:border-zinc-800/90"
+              } font-semibold px-8 py-3 rounded-lg cursor-pointer hover:scale-105 active:scale-100 hover:shadow-2xl transition-all duration-300 `}
+              onClick={gameStart ? resetGame : startGame}
             >
-              Start Game
-            </button>
-            <button
-              className={`border-3 border-zinc-800 text-zinc-800 font-semibold px-8 py-3 rounded-lg cursor-pointer hover:scale-105 active:scale-100 hover:shadow-2xl transition-all duration-300`}
-              onClick={resetGame}
-            >
-              Reset Game
+              {gameStart ? "Reset Game" : "Start Game"}
             </button>
           </div>
         </div>
